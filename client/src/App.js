@@ -1,31 +1,38 @@
-import React from "react"
-import "./App.css"
+import React, { useEffect, useState } from 'react';
+import './App.css';
+import useGetData from './hooks/useGetData';
 
-export default class App extends React.Component {
-  constructor(props) {
-    super(props)
+export default function App() {
+  const [loading, setLoading] = useState(true);
+  const [course, setCourse] = useState([]);
 
-    this.state = {
-      course: null
+  useEffect(() => {
+    async function fetchData() {
+      fetch('http://localhost:5000/courses/1')
+        .then((res) => res.json())
+        .then((course) => {
+          setCourse({ course: course });
+          setLoading(false);
+        });
     }
-  }
-  componentDidMount() {
-    fetch('http://localhost:5000/courses/1')
-      .then(res => res.json())
-      .then(course => this.setState({ course: course }))
-  }
-  render() {
-    return (
-      <div>
-        {this.state.course ? (
-          <ul className="course">
-            <li><strong>ID:</strong> {this.state.course.id}</li>
-            <li><strong>Title:</strong> {this.state.course.title}</li>
-          </ul>
-        ) : (
-          <div>Loading</div>
-        )}
-      </div>
-    )
-  }
+
+    fetchData();
+  }, []);
+
+  return (
+    <div className='test'>
+      {!loading ? (
+        <ul className='course'>
+          <li>
+            <strong>ID:</strong> {course.id}
+          </li>
+          <li>
+            <strong>Title:</strong> {course.title}
+          </li>
+        </ul>
+      ) : (
+        <div>Loading</div>
+      )}
+    </div>
+  );
 }
