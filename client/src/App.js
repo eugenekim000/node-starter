@@ -1,38 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import './App.css';
 import useGetData from './hooks/useGetData';
+import CourseCard from './components/CourseCard';
+import NotFound from './components/NotFound';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 export default function App() {
-  const [loading, setLoading] = useState(true);
-  const [course, setCourse] = useState([]);
-
-  useEffect(() => {
-    async function fetchData() {
-      fetch('http://localhost:5000/courses/1')
-        .then((res) => res.json())
-        .then((course) => {
-          setCourse({ course: course });
-          setLoading(false);
-        });
-    }
-
-    fetchData();
-  }, []);
-
   return (
-    <div className='test'>
-      {!loading ? (
-        <ul className='course'>
-          <li>
-            <strong>ID:</strong> {course.id}
-          </li>
-          <li>
-            <strong>Title:</strong> {course.title}
-          </li>
-        </ul>
-      ) : (
-        <div>Loading</div>
-      )}
-    </div>
+    <Router>
+      <Switch>
+        <Route exact path='/courses/:id' component={CourseCard} />
+        <Route exact path='/Not-Found' component={NotFound} />
+        <Route exact path='*' component={NotFound} />
+      </Switch>
+    </Router>
   );
 }

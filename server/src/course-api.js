@@ -1,17 +1,21 @@
-const axios = require('axios')
+const axios = require('axios');
 
 async function get(courseId) {
   try {
-    const res = await axios.get(`https://ep-coding-challenge-us-west-2.s3-us-west-2.amazonaws.com/courses/${courseId}`)
+    const res = await axios.get(
+      `https://ep-coding-challenge-us-west-2.s3-us-west-2.amazonaws.com/courses/${courseId}`
+    );
 
-    return { id: courseId, title: res.data.title }
+    console.log(res.data.title);
+
+    return { id: courseId, title: res.data.title, tags: res.data.tags };
   } catch (err) {
-    console.log(`Error finding course '${courseId}' from API`, err)
+    console.log(`Error finding course '${courseId}' from API`, err);
 
-    return null
+    return null;
   }
 }
 
 module.exports = {
-  get
-}
+  get,
+};
