@@ -1,42 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import React from 'react';
 import useToggle from '../hooks/useToggle';
+import useGetData from '../hooks/useGetData';
+import Tags from './Tags';
 
 export default function CourseCard(props) {
-  const [loading, setLoading] = useState(true);
-  const [course, setCourse] = useState({});
-  const [generalError, setGeneralError] = useState(false);
-
   let paramID = props.match.params.id;
-  const history = useHistory();
   const [toggle, toggleClick] = useToggle();
 
-  useEffect(() => {
-    async function fetchData() {
-      await fetch(`http://localhost:5000/courses/${paramID}`)
-        .then((res) => {
-          if (res.ok) return res.json();
-          else if (res.status === 404) {
-            history.push('/Not-Found');
-            return Promise.reject('error 404');
-          } else {
-            setGeneralError(true);
-            return Promise.reject('some other error: ' + res.status);
-          }
-        })
-        .then((course) => {
-          console.log(course, 'this is the course');
-          let dummy = { ...course, tags: 'this is a tag' };
-          setCourse(course);
-          setLoading(false);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-
-    fetchData();
-  }, []);
+  const [course, loading] = useGetData(paramID);
 
   return (
     <div className>
@@ -49,7 +20,9 @@ export default function CourseCard(props) {
             <strong>Title:</strong> {course.title}
           </li>
           <li onClick={toggleClick}>
-            <strong>Tags</strong> {toggle ? '...' : course.tags}
+            {/* created a separate tag component for future cases
+            ie adding api calls to get to all matching tags when clicked*/}
+            <strong>Tags</strong> {toggle ? '...' : <Tags tags={course.tags} />}
           </li>
         </ul>
       ) : (
