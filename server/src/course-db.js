@@ -5,14 +5,14 @@ async function createTable() {
     create table if not exists courses (
       id text primary key,
       title text not null,
-      tags text not null,
+      tags text not null
     );`;
 
   return db.execute(statement);
 }
 
 async function get(courseId) {
-  return db.get('select id, title from courses where id = $id;', {
+  return db.get('select id, title, tags from courses where id = $id;', {
     $id: courseId,
   });
 }

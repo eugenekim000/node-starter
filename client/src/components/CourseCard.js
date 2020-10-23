@@ -27,7 +27,7 @@ export default function CourseCard(props) {
         .then((course) => {
           console.log(course, 'this is the course');
           let dummy = { ...course, tags: 'this is a tag' };
-          setCourse(dummy);
+          setCourse(course);
           setLoading(false);
         })
         .catch((err) => {

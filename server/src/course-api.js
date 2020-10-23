@@ -6,8 +6,6 @@ async function get(courseId) {
       `https://ep-coding-challenge-us-west-2.s3-us-west-2.amazonaws.com/courses/${courseId}`
     );
 
-    console.log(res.data.title);
-
     return { id: courseId, title: res.data.title, tags: res.data.tags };
   } catch (err) {
     console.log(`Error finding course '${courseId}' from API`, err);
