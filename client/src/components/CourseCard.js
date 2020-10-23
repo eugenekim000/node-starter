@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import useToggle from '../hooks/useToggle';
 
 export default function CourseCard(props) {
   const [loading, setLoading] = useState(true);
@@ -8,6 +9,7 @@ export default function CourseCard(props) {
 
   let paramID = props.match.params.id;
   const history = useHistory();
+  const [toggle, toggleClick] = useToggle();
 
   useEffect(() => {
     async function fetchData() {
@@ -24,7 +26,8 @@ export default function CourseCard(props) {
         })
         .then((course) => {
           console.log(course, 'this is the course');
-          setCourse(course);
+          let dummy = { ...course, tags: 'this is a tag' };
+          setCourse(dummy);
           setLoading(false);
         })
         .catch((err) => {
@@ -44,6 +47,9 @@ export default function CourseCard(props) {
           </li>
           <li>
             <strong>Title:</strong> {course.title}
+          </li>
+          <li onClick={toggleClick}>
+            <strong>Tags</strong> {toggle ? '...' : course.tags}
           </li>
         </ul>
       ) : (
