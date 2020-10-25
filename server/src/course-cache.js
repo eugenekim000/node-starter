@@ -2,7 +2,6 @@ const courseDb = require('./course-db');
 const courseApi = require('./course-api');
 
 function notExpired(timestamp) {
-  console.log('this is the timestamp', timestamp);
   let currentTime = Math.floor(Date.now() / 1000);
   if (currentTime < timestamp) return true;
   return false;

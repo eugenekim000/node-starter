@@ -13,16 +13,19 @@ async function createTable() {
 }
 
 async function get(courseId) {
-  return db.get('select id, title, tags from courses where id = $id;', {
-    $id: courseId,
-  });
+  return db.get(
+    'select id, title, tags, expirationDate from courses where id = $id;',
+    {
+      $id: courseId,
+    }
+  );
 }
 
 async function upsert(course) {
   const statement = `
     insert into courses (id, title, tags, expirationDate)
     values ($id, $title, $tags, $expirationDate)
-    on conflict(id) do update set title = $title;`;
+    on conflict(id) do update set title = $title, tags = $tags, expirationDate = $expirationDate;`;
 
   return db.execute(statement, {
     $id: course.id,

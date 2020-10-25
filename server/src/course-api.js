@@ -1,7 +1,8 @@
 const axios = require('axios');
 
 //expiration date is set to one day ahead.
-const expirationOffset = 24 * 3600;
+// const expirationOffset = 24 * 3600;
+const expirationOffset = 10;
 
 async function get(courseId) {
   try {
@@ -16,7 +17,7 @@ async function get(courseId) {
       id: courseId,
       title: res.data.title,
       tags: res.data.tags,
-      expirationDate,
+      expirationDate: expirationDate,
     };
   } catch (err) {
     console.log(`Error finding course '${courseId}' from API`, err);
