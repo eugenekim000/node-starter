@@ -5,7 +5,8 @@ async function createTable() {
     create table if not exists courses (
       id text primary key,
       title text not null,
-      tags text not null
+      tags text not null,
+      expirationDate unsigned int(11) not null
     );`;
 
   return db.execute(statement);
@@ -19,14 +20,15 @@ async function get(courseId) {
 
 async function upsert(course) {
   const statement = `
-    insert into courses (id, title, tags)
-    values ($id, $title, $tags)
+    insert into courses (id, title, tags, expirationDate)
+    values ($id, $title, $tags, $expirationDate)
     on conflict(id) do update set title = $title;`;
 
   return db.execute(statement, {
     $id: course.id,
     $title: course.title,
     $tags: course.tags,
+    $expirationDate: course.expirationDate,
   });
 }
 
