@@ -3,15 +3,20 @@ import ReactDOM from 'react-dom';
 import { MemoryRouter } from 'react-router-dom';
 import App from '../App';
 import Enzyme, { shallow, mount } from 'enzyme';
-import { act } from 'react-dom/test-utils';
 import Adapter from 'enzyme-adapter-react-16';
-import useGetData from '../hooks/useGetData';
-
-Enzyme.configure({ adapter: new Adapter() });
+import * as useGetData from '../hooks/useGetData';
 
 const waitForAsync = () => new Promise((resolve) => setImmediate(resolve));
+Enzyme.configure({ adapter: new Adapter() });
+
+jest.mock('../hooks/useGetData');
+const mockedHook = useGetData;
 
 describe('App', () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   it('renders without crashing', () => {
     const div = document.createElement('div');
     ReactDOM.render(
@@ -34,6 +39,8 @@ describe('App', () => {
   });
 
   it('should render loading while fetching data', () => {
+    mockedHook.default.mockImplementation(() => [{}, true]);
+
     const wrapper = mount(
       <MemoryRouter initialEntries={['/courses/2']}>
         <App />
@@ -43,29 +50,28 @@ describe('App', () => {
     expect(wrapper.text()).toEqual('Loading');
   });
 
-  it('should sucessfully get async data', async () => {
+  it('should sucessfully render data and toggle clicks', async () => {
+    let mockLoading = false;
+    let mockCourse = {
+      id: 1,
+      title: 'React: The Big Picture',
+      tags: 'front-end-web-development',
+    };
+
+    mockedHook.default.mockImplementation(() => [mockCourse, mockLoading]);
+
     const component = mount(
       <MemoryRouter initialEntries={['/courses/2']}>
         <App />
       </MemoryRouter>
     );
-    expect(component.text()).toEqual('Loading');
 
-    await act(async () => {
-      await Promise.resolve(component);
-      await new Promise((resolve) => setImmediate(resolve));
-      component.update();
+    let children = component.find('.course ul').children().length;
+    expect(children).toEqual(3);
 
-      console.log(component.debug());
-
-      expect(component.find('.course').children()).to.have.lengthOf(3);
-    });
+    let tagLi = component.find('.tag-li');
+    tagLi.simulate('click');
+    let tagContainer = component.find('.tags-container');
+    expect(tagContainer.text()).toEqual('front-end-web-development');
   });
-
-  // it('should toggle the tag field', async () => {
-  //   const component = render(<App />);
-  //   const button = component.find('.tag-toggle');
-  //   button.simulate('click');
-  //   expect(component.find('.tag-container').exists()).toBeTruthy();
-  // });
 });

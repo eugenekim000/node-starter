@@ -6,7 +6,7 @@ export default function Tags(props) {
   let tagArray = tagString.split(',');
 
   return (
-    <div>
+    <div className='tags-container'>
       {tagArray.map((tag, i) => (
         <Tag tag={tag} key={i} />
       ))}

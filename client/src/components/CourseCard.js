@@ -20,7 +20,7 @@ export default function CourseCard(props) {
             <li>
               <strong>Title:</strong> {course.title}
             </li>
-            <li onClick={toggleClick}>
+            <li onClick={toggleClick} className='tag-li'>
               {/* created a separate tag component for future cases
             ie adding api calls to get to all matching tags when clicked*/}
               <strong>Tags</strong>{' '}
