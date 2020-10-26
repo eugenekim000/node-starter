@@ -1,8 +1,7 @@
 const axios = require('axios');
 
 //expiration date is set to one day ahead.
-// const expirationOffset = 24 * 3600;
-const expirationOffset = 10;
+const expirationOffset = 24 * 3600;
 
 async function get(courseId) {
   try {
