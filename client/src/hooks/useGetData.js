@@ -19,7 +19,6 @@ export default function useGetData(paramID) {
           }
         })
         .then((course) => {
-          console.log(course, 'this is the course');
           let dummy = { ...course, tags: 'this is a tag' };
           setCourse(course);
           setLoading(false);

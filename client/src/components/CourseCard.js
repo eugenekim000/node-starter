@@ -12,19 +12,22 @@ export default function CourseCard(props) {
   return (
     <div className>
       {!loading ? (
-        <ul className='course'>
-          <li>
-            <strong>ID:</strong> {course.id}
-          </li>
-          <li>
-            <strong>Title:</strong> {course.title}
-          </li>
-          <li onClick={toggleClick}>
-            {/* created a separate tag component for future cases
+        <div className='course'>
+          <ul>
+            <li>
+              <strong>ID:</strong> {course.id}
+            </li>
+            <li>
+              <strong>Title:</strong> {course.title}
+            </li>
+            <li onClick={toggleClick}>
+              {/* created a separate tag component for future cases
             ie adding api calls to get to all matching tags when clicked*/}
-            <strong>Tags</strong> {toggle ? '...' : <Tags tags={course.tags} />}
-          </li>
-        </ul>
+              <strong>Tags</strong>{' '}
+              {toggle ? '...' : <Tags tags={course.tags} />}
+            </li>
+          </ul>
+        </div>
       ) : (
         <div>Loading</div>
       )}

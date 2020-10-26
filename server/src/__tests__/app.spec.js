@@ -46,7 +46,6 @@ describe('app', () => {
         courseApi.get.mockResolvedValue(null);
 
         const res = await request(app).get('/courses/derp').send();
-        console.log(res.body, 'this is the body');
 
         expect(res.status).toEqual(404);
       });
